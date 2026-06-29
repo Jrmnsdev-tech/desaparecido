@@ -1,10 +1,10 @@
 /* --- VARIABLES DE DISEÑO PREMIUM --- */
 :root {
-    --primary-blue: #0D47A1;      /* Azul Marino: Autoridad y confianza */
-    --action-red: #D32F2F;        /* Rojo Suave: Acción sin ser alarmista */
-    --text-charcoal: #37474F;     /* Gris Carbón: Alta legibilidad */
-    --bg-bone: #FAFAFA;          /* Blanco Hueso: Fondo limpio */
-    --border-soft: #CFD8DC;       /* Gris suave para bordes */
+    --primary-blue: #0D47A1;    /* Azul Marino: Autoridad y confianza */
+    --action-red: #D32F2F;      /* Rojo Suave: Acción sin ser alarmista */
+    --text-charcoal: #37474F;   /* Gris Carbón: Alta legibilidad */
+    --bg-bone: #FAFAFA;         /* Blanco Hueso: Fondo limpio */
+    --border-soft: #CFD8DC;     /* Gris suave para bordes */
     --gap: 2rem;
 }
 
@@ -15,12 +15,14 @@ body {
     color: var(--text-charcoal);
     margin: 0;
     line-height: 1.6;
+    box-sizing: border-box;
 }
 
 /* --- TIPOGRAFÍA --- */
 h1, h2 {
     color: var(--primary-blue);
     font-weight: 700;
+    margin-top: 0;
 }
 
 p {
@@ -34,7 +36,11 @@ p {
     line-height: 1.1;
 }
 
-.main-logo span { color: var(--text-charcoal); display: block; font-size: 0.6em; }
+.main-logo span { 
+    color: var(--text-charcoal); 
+    display: block; 
+    font-size: 0.6em; 
+}
 
 /* --- LAYOUT PROFESIONAL --- */
 .container {
@@ -63,13 +69,23 @@ p {
     border: 1px solid var(--border-soft);
 }
 
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
 input, textarea {
     width: 100%;
     padding: 0.9rem;
-    margin-bottom: 1.2rem;
     border: 1px solid var(--border-soft);
     border-radius: 6px;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
 .btn-alert {
@@ -85,10 +101,12 @@ input, textarea {
     transition: background 0.3s ease;
 }
 
-.btn-alert:hover { background-color: #B71C1C; }
+.btn-alert:hover { 
+    background-color: #B71C1C; 
+}
 
 /* --- RESPONSIVIDAD --- */
 @media (max-width: 768px) {
     .main-logo { font-size: 2.5rem; }
-    .main-layout { padding: 1.5rem 1rem; }
+    .main-layout { padding: 1.5rem 1rem; gap: 2rem; }
 }
