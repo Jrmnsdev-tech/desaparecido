@@ -1,15 +1,15 @@
 "use strict";
 
-// Definimos la inicialización de forma que espere las claves
-let supabase;
-
-window.initSupabase = (url, key) => {
-    supabase = window.supabase.createClient(url, key);
-};
+// Inicializamos Supabase globalmente
+// IMPORTANTE: Asegúrate de reemplazar estos valores por los tuyos 
+// o usar las variables de entorno de Netlify
+const supabase = window.supabase.createClient(
+    "TU_URL_SUPABASE_AQUI", 
+    "TU_KEY_SUPABASE_AQUI"
+);
 
 window.AppAPI = {
     async subirFoto(file) {
-        if (!supabase) throw new Error("Supabase no inicializado");
         const fileExt = file.name.split('.').pop();
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const { error } = await supabase.storage.from('fotos-desaparecidos').upload(fileName, file);
@@ -20,14 +20,12 @@ window.AppAPI = {
     },
 
     async registrarDesaparecido(datos) {
-        if (!supabase) throw new Error("Supabase no inicializado");
         const { data, error } = await supabase.from('personas').insert([datos]).select();
         if (error) throw error;
         return data[0];
     },
 
     async cargarDesaparecidos() {
-        if (!supabase) throw new Error("Supabase no inicializado");
         const { data, error } = await supabase.from('personas').select('*').order('id', { ascending: false });
         if (error) throw error;
         return data;
