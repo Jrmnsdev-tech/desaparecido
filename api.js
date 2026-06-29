@@ -1,15 +1,16 @@
 "use strict";
 
-// Usamos variables de entorno (ejemplo para Vite/Frontend moderno)
-const SUPABASE_URL = "https://womcssyeohjuebyzgakh.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvbWNzc3llb2hqdWVieXpnYWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1OTAwOTEsImV4cCI6MjA5ODE2NjA5MX0.9UKdbCpxsCUqec3lyU-L_LUPv6Q_HHQJ5O_v60ry-J0";
+// Aquí Netlify inyectará las claves que definas en su panel de configuración
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Inicialización de la instancia de Supabase
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 window.AppAPI = {
     async subirFoto(file) {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${crypto.randomUUID()}.${fileExt}`; // Mejor usar randomUUID
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const { error } = await supabase.storage.from('fotos-desaparecidos').upload(fileName, file);
         if (error) throw error;
         
