@@ -1,37 +1,49 @@
-document.getElementById('report-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.disabled = true;
-    btn.innerText = "Procesando...";
+"use strict";
 
-    try {
-        const fileInput = document.getElementById('person-photo-file');
-        if (!fileInput.files[0]) throw new Error("Selecciona una foto");
+function iniciarLogica() {
+    const form = document.getElementById('report-form');
+    if (!form) return;
 
-        // 1. Subir foto primero
-        const fotoUrl = await window.AppAPI.subirFoto(fileInput.files[0]);
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        // 2. Preparar objeto (ASEGÚRATE QUE ESTOS NOMBRES EXISTAN EN TU TABLA)
-        const datos = {
-            nombre: document.getElementById('person-name').value,
-            telefono: document.getElementById('person-phone').value,
-            pais: document.getElementById('person-pais').value,
-            ciudad: document.getElementById('person-ciudad').value,
-            ubicacion_detallada: document.getElementById('person-ubicacion').value,
-            descripcion_fisica: document.getElementById('person-desc').value,
-            foto: fotoUrl
-        };
+        if (!window.AppAPI) {
+            alert("El sistema aún está cargando, intenta en un segundo.");
+            return;
+        }
 
-        // 3. Registrar en BD
-        await window.AppAPI.registrarDesaparecido(datos);
-        
-        alert("¡Reporte publicado con éxito!");
-        location.reload();
+        const btn = e.target.querySelector('button');
+        btn.disabled = true;
+        btn.innerText = "Publicando...";
 
-    } catch (err) {
-        alert("FALLO TOTAL: " + err.message);
-        console.error(err);
-        btn.disabled = false;
-        btn.innerText = "Publicar Reporte";
-    }
-});
+        try {
+            const file = document.getElementById('person-photo-file').files[0];
+            const fotoUrl = await window.AppAPI.subirFoto(file);
+            
+            const datos = {
+                nombre: document.getElementById('person-name').value.trim(),
+                telefono: document.getElementById('person-phone').value.trim(),
+                pais: document.getElementById('person-pais').value.trim(),
+                ciudad: document.getElementById('person-ciudad').value.trim(),
+                ubicacion_detallada: document.getElementById('person-ubicacion').value.trim(),
+                descripcion_fisica: document.getElementById('person-desc').value.trim(),
+                foto: fotoUrl
+            };
+
+            await window.AppAPI.registrarDesaparecido(datos);
+            alert("¡Reporte publicado con éxito!");
+            location.reload();
+        } catch (err) {
+            console.error(err);
+            alert("Error al publicar: " + err.message);
+            btn.disabled = false;
+            btn.innerText = "Publicar Reporte";
+        }
+    });
+}
+
+// Espera a que api.js avise que está listo
+window.addEventListener('api-ready', iniciarLogica);
+
+// Por si acaso, ejecuta la lógica si el evento ya pasó
+if (window.AppAPI) iniciarLogica();
